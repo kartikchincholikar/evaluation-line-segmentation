@@ -7,27 +7,28 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 10px;
             background-color: #f5f5f5;
         }
         .container {
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            padding: 15px;
         }
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            font-size: 24px;
         }
         .controls {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 20px 0;
+            margin: 15px 0;
             gap: 10px;
             flex-wrap: wrap;
         }
@@ -35,7 +36,7 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-            margin-top: 20px;
+            margin-top: 15px;
         }
         .comparison {
             display: flex;
@@ -51,7 +52,7 @@
             flex: 1;
             border: 1px solid #ddd;
             border-radius: 4px;
-            padding: 15px;
+            padding: 10px;
             background-color: #fafafa;
             display: flex;
             flex-direction: column;
@@ -59,37 +60,51 @@
         .image-wrapper h3 {
             text-align: center;
             margin-top: 0;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             color: #444;
             font-size: 18px;
         }
         .image-wrapper p {
             text-align: center;
-            margin-top: 15px;
+            margin-top: 10px;
             color: #666;
             font-size: 14px;
             line-height: 1.5;
         }
         .image-box {
+            position: relative;
+            overflow: hidden;
+            height: 500px;
+            border: 1px solid #eee;
+            background-color: #f0f0f0;
+            cursor: grab;
+            touch-action: none;
+        }
+        .image-box:active {
+            cursor: grabbing;
+        }
+        .image-box img {
+            position: absolute;
+            max-width: none;
+            width: auto;
+            height: auto;
+            transform-origin: 0 0;
+            /* Initial scale will be set by JavaScript */
+        }
+        .zoom-controls {
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 200px;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 2px;
+            margin-top: 10px;
+            gap: 10px;
         }
         button {
             background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             transition: background-color 0.3s;
         }
         button:hover {
@@ -104,15 +119,16 @@
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            font-size: 16px;
+            font-size: 14px;
             text-align: center;
         }
         .status {
             text-align: center;
-            margin-top: 10px;
-            margin-bottom: 20px;
+            margin-top: 5px;
+            margin-bottom: 15px;
             font-style: italic;
             color: #666;
+            font-size: 14px;
         }
         .page-indicator {
             display: flex;
@@ -120,8 +136,33 @@
             align-items: center;
             gap: 10px;
         }
+        .zoom-indicator {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+        }
         .loading {
             opacity: 0.5;
+        }
+        .reset-button {
+            background-color: #607D8B;
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+        .sync-controls {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        .sync-controls button {
+            background-color: #2196F3;
+        }
+        .sync-controls button:hover {
+            background-color: #0b7dda;
+        }
+        .sync-controls button.active {
+            background-color: #0b7dda;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
         }
         @media (max-width: 480px) {
             .controls {
@@ -133,6 +174,9 @@
             }
             .page-indicator {
                 margin-top: 10px;
+            }
+            .image-box {
+                height: 350px;
             }
         }
     </style>
@@ -151,22 +195,38 @@
             <button id="nextBtn">Next</button>
         </div>
         
+        <div class="sync-controls">
+            <button id="syncToggleBtn" class="active">Synchronized View: ON</button>
+        </div>
+        
         <div class="status" id="status">Viewing page 0</div>
         
         <div class="image-container">
             <div class="comparison">
                 <div class="image-wrapper">
                     <h3>Our Method</h3>
-                    <div class="image-box">
+                    <div class="image-box" id="ourMethodBox">
                         <img id="ourMethodImg" src="images/0_our_method.png" alt="Our Method">
                     </div>
+                    <div class="zoom-controls">
+                        <button class="zoom-in-btn" data-target="ourMethod">Zoom +</button>
+                        <button class="zoom-out-btn" data-target="ourMethod">Zoom -</button>
+                        <button class="reset-button" data-target="ourMethod">Reset</button>
+                    </div>
+                    <div class="zoom-indicator" id="ourMethodZoomLevel">Zoom: 100%</div>
                     <p id="ourMethodCaption">Novel deep learning approach with enhanced text segmentation and recognition capabilities.</p>
                 </div>
                 <div class="image-wrapper">
                     <h3>Seamformer</h3>
-                    <div class="image-box">
+                    <div class="image-box" id="seamformerBox">
                         <img id="seamformerImg" src="images/0_seamformer.png" alt="Seamformer">
                     </div>
+                    <div class="zoom-controls">
+                        <button class="zoom-in-btn" data-target="seamformer">Zoom +</button>
+                        <button class="zoom-out-btn" data-target="seamformer">Zoom -</button>
+                        <button class="reset-button" data-target="seamformer">Reset</button>
+                    </div>
+                    <div class="zoom-indicator" id="seamformerZoomLevel">Zoom: 100%</div>
                     <p id="seamformerCaption">State-of-the-art transformer-based network for manuscript analysis.</p>
                 </div>
             </div>
@@ -175,7 +235,12 @@
 
     <script>
         // Configuration
-        const MAX_PAGES = 15; // Set this to the actual number of pages you have
+        const MAX_PAGES = 100; // Set this to the actual number of pages you have
+        const IMAGE_PATH = "images/"; // Path to your images folder
+        const ZOOM_STEP = 0.1; // 10% zoom steps
+        const MIN_ZOOM = 0.5; // Minimum zoom level (50%)
+        const MAX_ZOOM = 5.0; // Maximum zoom level (500%)
+        const INITIAL_ZOOM = 1.0; // Initial zoom level (100%)
         
         // Custom captions - edit these to match your needs
         const OUR_METHOD_CAPTION = "When line segmentation predictions are made at node (character) level, it is easier to make corrections by adding or deleting edges.";
@@ -188,15 +253,283 @@
         const pageInput = document.getElementById('pageInput');
         const ourMethodImg = document.getElementById('ourMethodImg');
         const seamformerImg = document.getElementById('seamformerImg');
+        const ourMethodBox = document.getElementById('ourMethodBox');
+        const seamformerBox = document.getElementById('seamformerBox');
         const statusDisplay = document.getElementById('status');
         const ourMethodCaption = document.getElementById('ourMethodCaption');
         const seamformerCaption = document.getElementById('seamformerCaption');
+        const ourMethodZoomLevel = document.getElementById('ourMethodZoomLevel');
+        const seamformerZoomLevel = document.getElementById('seamformerZoomLevel');
+        const syncToggleBtn = document.getElementById('syncToggleBtn');
         
         let currentPage = 0;
+        let syncEnabled = true; // Default sync status
+        
+        // Image panning state
+        const imageState = {
+            ourMethod: { 
+                zoom: INITIAL_ZOOM, 
+                panX: 0, 
+                panY: 0, 
+                isPanning: false, 
+                startX: 0, 
+                startY: 0, 
+                startPanX: 0, 
+                startPanY: 0 
+            },
+            seamformer: { 
+                zoom: INITIAL_ZOOM, 
+                panX: 0, 
+                panY: 0, 
+                isPanning: false, 
+                startX: 0, 
+                startY: 0, 
+                startPanX: 0, 
+                startPanY: 0 
+            }
+        };
         
         // Set the captions
         ourMethodCaption.textContent = OUR_METHOD_CAPTION;
         seamformerCaption.textContent = SEAMFORMER_CAPTION;
+        
+        // Toggle sync
+        syncToggleBtn.addEventListener('click', () => {
+            syncEnabled = !syncEnabled;
+            syncToggleBtn.textContent = `Synchronized View: ${syncEnabled ? 'ON' : 'OFF'}`;
+            syncToggleBtn.classList.toggle('active', syncEnabled);
+            
+            if (syncEnabled) {
+                // When turning sync back on, sync to the ourMethod state
+                syncImageStates('ourMethod');
+            }
+        });
+        
+        // Sync the image states
+        function syncImageStates(sourceTarget) {
+            if (!syncEnabled) return;
+            
+            const source = imageState[sourceTarget];
+            const target = sourceTarget === 'ourMethod' ? imageState['seamformer'] : imageState['ourMethod'];
+            const targetImg = sourceTarget === 'ourMethod' ? seamformerImg : ourMethodImg;
+            const targetZoomDisplay = sourceTarget === 'ourMethod' ? seamformerZoomLevel : ourMethodZoomLevel;
+            
+            // Sync the states
+            target.zoom = source.zoom;
+            target.panX = source.panX;
+            target.panY = source.panY;
+            
+            // Update the target image and display
+            updateImageTransform(targetImg, target);
+            targetZoomDisplay.textContent = `Zoom: ${Math.round(target.zoom * 100)}%`;
+        }
+        
+        // Initialize image controls
+        function initImageControls() {
+            // Zoom in buttons
+            document.querySelectorAll('.zoom-in-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const target = btn.getAttribute('data-target');
+                    zoomImage(target, imageState[target].zoom + ZOOM_STEP, true);
+                });
+            });
+            
+            // Zoom out buttons
+            document.querySelectorAll('.zoom-out-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const target = btn.getAttribute('data-target');
+                    zoomImage(target, imageState[target].zoom - ZOOM_STEP, true);
+                });
+            });
+            
+            // Reset buttons
+            document.querySelectorAll('.reset-button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const target = btn.getAttribute('data-target');
+                    resetImage(target, true);
+                });
+            });
+            
+            // Mouse wheel zoom
+            ourMethodBox.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP;
+                zoomImage('ourMethod', imageState.ourMethod.zoom + delta, true);
+            });
+            
+            seamformerBox.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP;
+                zoomImage('seamformer', imageState.seamformer.zoom + delta, true);
+            });
+            
+            // Mouse-based panning
+            setupPanning(ourMethodBox, ourMethodImg, 'ourMethod');
+            setupPanning(seamformerBox, seamformerImg, 'seamformer');
+        }
+        
+        // Set up panning events for an image
+        function setupPanning(box, img, stateKey) {
+            // Mouse events
+            box.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                const state = imageState[stateKey];
+                state.isPanning = true;
+                state.startX = e.clientX;
+                state.startY = e.clientY;
+                state.startPanX = state.panX;
+                state.startPanY = state.panY;
+                box.style.cursor = 'grabbing';
+            });
+            
+            box.addEventListener('mousemove', (e) => {
+                const state = imageState[stateKey];
+                if (state.isPanning) {
+                    state.panX = state.startPanX + (e.clientX - state.startX);
+                    state.panY = state.startPanY + (e.clientY - state.startY);
+                    updateImageTransform(img, state);
+                    
+                    // Sync the other image if enabled
+                    if (syncEnabled) {
+                        syncImageStates(stateKey);
+                    }
+                }
+            });
+            
+            box.addEventListener('mouseup', () => {
+                const state = imageState[stateKey];
+                state.isPanning = false;
+                box.style.cursor = 'grab';
+            });
+            
+            box.addEventListener('mouseleave', () => {
+                const state = imageState[stateKey];
+                state.isPanning = false;
+                box.style.cursor = 'grab';
+            });
+            
+            // Touch events for mobile devices
+            box.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const state = imageState[stateKey];
+                state.isPanning = true;
+                state.startX = e.touches[0].clientX;
+                state.startY = e.touches[0].clientY;
+                state.startPanX = state.panX;
+                state.startPanY = state.panY;
+            });
+            
+            box.addEventListener('touchmove', (e) => {
+                const state = imageState[stateKey];
+                if (state.isPanning) {
+                    state.panX = state.startPanX + (e.touches[0].clientX - state.startX);
+                    state.panY = state.startPanY + (e.touches[0].clientY - state.startY);
+                    updateImageTransform(img, state);
+                    
+                    // Sync the other image if enabled
+                    if (syncEnabled) {
+                        syncImageStates(stateKey);
+                    }
+                }
+            });
+            
+            box.addEventListener('touchend', () => {
+                const state = imageState[stateKey];
+                state.isPanning = false;
+            });
+        }
+        
+        // Update image transform for panning and zooming
+        function updateImageTransform(img, state) {
+            img.style.transform = `translate(${state.panX}px, ${state.panY}px) scale(${state.zoom})`;
+        }
+        
+        // Zoom an image
+        function zoomImage(target, zoomLevel, sync = false) {
+            // Enforce zoom limits
+            const newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoomLevel));
+            
+            // Update state
+            imageState[target].zoom = newZoom;
+            
+            // Update display
+            const img = target === 'ourMethod' ? ourMethodImg : seamformerImg;
+            const zoomDisplay = target === 'ourMethod' ? ourMethodZoomLevel : seamformerZoomLevel;
+            
+            updateImageTransform(img, imageState[target]);
+            zoomDisplay.textContent = `Zoom: ${Math.round(newZoom * 100)}%`;
+            
+            // Sync the other image if requested and enabled
+            if (sync && syncEnabled) {
+                syncImageStates(target);
+            }
+        }
+        
+        // Reset image position and zoom
+        function resetImage(target, sync = false) {
+            const state = imageState[target];
+            state.zoom = INITIAL_ZOOM;
+            state.panX = 0;
+            state.panY = 0;
+            
+            const img = target === 'ourMethod' ? ourMethodImg : seamformerImg;
+            const zoomDisplay = target === 'ourMethod' ? ourMethodZoomLevel : seamformerZoomLevel;
+            
+            updateImageTransform(img, state);
+            zoomDisplay.textContent = `Zoom: 100%`;
+            
+            // Sync the other image if requested and enabled
+            if (sync && syncEnabled) {
+                syncImageStates(target);
+            }
+        }
+        
+        // Reset image position and zoom for both images
+        function resetAllImages() {
+            resetImage('ourMethod', false);
+            resetImage('seamformer', false);
+        }
+        
+        // Fit image to container
+        function fitImageToContainer(img, box, target) {
+            return new Promise((resolve) => {
+                if (img.complete) {
+                    calculateAndApplyInitialScale(img, box, target);
+                    resolve();
+                } else {
+                    img.onload = () => {
+                        calculateAndApplyInitialScale(img, box, target);
+                        resolve();
+                    };
+                }
+            });
+        }
+        
+        // Calculate and apply the initial scale to fit the image in the container
+        function calculateAndApplyInitialScale(img, box, target) {
+            const boxWidth = box.offsetWidth;
+            const boxHeight = box.offsetHeight;
+            const imgWidth = img.naturalWidth;
+            const imgHeight = img.naturalHeight;
+            
+            const scaleX = boxWidth / imgWidth;
+            const scaleY = boxHeight / imgHeight;
+            
+            // Choose the smaller scale to fit the image in the container
+            const scale = Math.min(scaleX, scaleY);
+            
+            // Apply the scale
+            img.style.transform = `scale(${scale})`;
+            
+            // Update the state
+            imageState[target].zoom = scale;
+            imageState[target].panX = 0;
+            imageState[target].panY = 0;
+            
+            // Update zoom indicator
+            const zoomDisplay = target === 'ourMethod' ? ourMethodZoomLevel : seamformerZoomLevel;
+            zoomDisplay.textContent = `Zoom: ${Math.round(scale * 100)}%`;
+        }
         
         // Update images based on current page
         function updateImages() {
@@ -204,38 +537,30 @@
             ourMethodImg.classList.add('loading');
             seamformerImg.classList.add('loading');
             
+            // Reset panning and zooming
+            resetAllImages();
+            
             // Update image sources
-            const ourMethodSrc = `images/${currentPage}_our_method.png`;
-            const seamformerSrc = `images/${currentPage}_seamformer.png`;
+            const ourMethodSrc = `${IMAGE_PATH}${currentPage}_our_method.png`;
+            const seamformerSrc = `${IMAGE_PATH}${currentPage}_seamformer.png`;
             
             // Update status and input
             statusDisplay.textContent = `Viewing page ${currentPage}`;
             pageInput.value = currentPage;
             
-            // Preload images
-            preloadImage(ourMethodSrc, (success) => {
-                ourMethodImg.src = ourMethodSrc;
-                ourMethodImg.classList.remove('loading');
+            // Load images
+            Promise.all([
+                loadImage(ourMethodSrc, ourMethodImg),
+                loadImage(seamformerSrc, seamformerImg)
+            ]).then(() => {
+                // Fit images to container
+                fitImageToContainer(ourMethodImg, ourMethodBox, 'ourMethod');
+                fitImageToContainer(seamformerImg, seamformerBox, 'seamformer');
                 
-                if (!success) {
-                    ourMethodImg.alt = "Image not found";
-                    ourMethodImg.style.border = "1px solid red";
-                } else {
-                    ourMethodImg.alt = "Our Method - Page " + currentPage;
-                    ourMethodImg.style.border = "none";
-                }
-            });
-            
-            preloadImage(seamformerSrc, (success) => {
-                seamformerImg.src = seamformerSrc;
-                seamformerImg.classList.remove('loading');
-                
-                if (!success) {
-                    seamformerImg.alt = "Image not found";
-                    seamformerImg.style.border = "1px solid red";
-                } else {
-                    seamformerImg.alt = "Seamformer - Page " + currentPage;
-                    seamformerImg.style.border = "none";
+                // Make sure they're synced if sync is enabled
+                if (syncEnabled) {
+                    // Small delay to ensure both images are properly loaded and measured
+                    setTimeout(() => syncImageStates('ourMethod'), 100);
                 }
             });
             
@@ -244,19 +569,29 @@
             nextBtn.disabled = currentPage === MAX_PAGES - 1;
         }
         
-        // Preload image and check if it exists
-        function preloadImage(url, callback) {
-            const img = new Image();
-            img.onload = function() {
-                callback(true);
-            };
-            img.onerror = function() {
-                callback(false);
-            };
-            img.src = url;
+        // Load an image and handle errors
+        function loadImage(src, imgElement) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = function() {
+                    imgElement.src = src;
+                    imgElement.classList.remove('loading');
+                    imgElement.alt = `Page ${currentPage}`;
+                    imgElement.style.border = "none";
+                    resolve(true);
+                };
+                img.onerror = function() {
+                    imgElement.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23dc3545' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E";
+                    imgElement.classList.remove('loading');
+                    imgElement.alt = "Image not found";
+                    imgElement.style.border = "1px solid red";
+                    resolve(false);
+                };
+                img.src = src;
+            });
         }
         
-        // Event listeners
+        // Event listeners for navigation
         prevBtn.addEventListener('click', () => {
             if (currentPage > 0) {
                 currentPage--;
@@ -288,8 +623,11 @@
             }
         });
         
-        // Initialize
-        updateImages();
+        // Initialize the viewer
+        window.addEventListener('load', () => {
+            initImageControls();
+            updateImages();
+        });
     </script>
 </body>
 </html>
