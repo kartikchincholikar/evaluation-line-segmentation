@@ -498,21 +498,36 @@
                 }
             });
         }
-        
-        // Calculate and apply the initial scale to fit the image in the container
+
         function calculateAndApplyInitialScale(img, box, target) {
-            // Apply the initial zoom directly
-            img.style.transform = `scale(${INITIAL_ZOOM})`;
-            
-            // Update the state
-            imageState[target].zoom = INITIAL_ZOOM;
-            imageState[target].panX = 0;
-            imageState[target].panY = 0;
-            
-            // Update zoom indicator
-            const zoomDisplay = target === 'ourMethod' ? ourMethodZoomLevel : seamformerZoomLevel;
-            zoomDisplay.textContent = `Zoom: ${Math.round(INITIAL_ZOOM * 100)}%`;
-        }
+                    // Get container dimensions
+                    const boxRect = box.getBoundingClientRect();
+                    // Get the image's natural dimensions
+                    const imgWidth = img.naturalWidth;
+                    const imgHeight = img.naturalHeight;
+                    
+                    // Use the initial zoom level
+                    const zoom = INITIAL_ZOOM;
+                    const scaledWidth = imgWidth * zoom;
+                    const scaledHeight = imgHeight * zoom;
+                    
+                    // Calculate offsets to center the image in the container
+                    const offsetX = (boxRect.width - scaledWidth) / 2;
+                    const offsetY = (boxRect.height - scaledHeight) / 2;
+                    
+                    // Apply the transform with translation and scaling
+                    img.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${zoom})`;
+                    
+                    // Update the image state
+                    imageState[target].zoom = zoom;
+                    imageState[target].panX = offsetX;
+                    imageState[target].panY = offsetY;
+                    
+                    // Update zoom indicator
+                    const zoomDisplay = target === 'ourMethod' ? ourMethodZoomLevel : seamformerZoomLevel;
+                    zoomDisplay.textContent = `Zoom: ${Math.round(zoom * 100)}%`;
+                }
+
         
         // Update images based on current page
         function updateImages() {
