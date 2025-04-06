@@ -196,7 +196,7 @@
             <button id="syncToggleBtn" class="active" style="display: none;">Synchronized View: ON</button>
         </div>
         
-        <div class="status" id="status">Viewing page 0. Please use the mouse to Zoom/Pan</div>
+        <div class="status" id="status">Viewing page 0. Please use the mouse to Zoom/Pan.</div>
 
         <div class="image-container">
             <div class="comparison">
@@ -224,7 +224,7 @@
                 </div>
             </div>
         </div>
-        <h3>When text-line segmentation predictions are made at pixel level (left figure), data annotation and segmentation output correction can become tedious and time consuming. In comparison (right figure), when text-line segmentation predictions are made at graph-structural level, where characters (nodes) belonging to the same text-line are connected (with edges), it can be much easier to annotate the data and make corrections to the output - by simply adding or deleting edges. We envision this process to become progressively more automatic by teaching  Graph Neural Networks (GNNs) to learn from human-made edge modifications.</h3>
+        <h5>When text-line segmentation predictions are made at pixel level (left figure), data annotation and making corrections to the output can become tedious and time consuming. In comparison (right figure), when text-line segmentation predictions are made at graph-structural level, where characters (nodes) belonging to the same text-line are linked by edges, it can be much easier to annotate the data and make corrections to the output - by simply adding or deleting edges. We envision this process to become progressively more automatic by teaching  Graph Neural Networks (GNNs) to learn from human-made edge modifications.</h5>
     </div>
 
     <script>
@@ -543,7 +543,7 @@
             const seamformerSrc = `${IMAGE_PATH}${currentPage}_seamformer.png`;
             
             // Update status and input
-            statusDisplay.textContent = `Viewing page ${currentPage}. Please use the mouse to Zoom/Pan`;
+            statusDisplay.textContent = `Viewing page ${currentPage}. Please use the mouse to Zoom/Pan.`;
             pageInput.value = currentPage;
             
             // Load images
