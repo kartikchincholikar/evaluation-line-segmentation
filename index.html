@@ -187,7 +187,7 @@
             <div class="page-indicator">
                 <span>Page: </span>
                 <input type="number" id="pageInput" min="0" value="0">
-                <button id="goBtn">Go</button>
+                <button id="goBtn" style="display: none;">Go</button>
             </div>
             <button id="nextBtn">Next</button>
         </div>
@@ -200,17 +200,6 @@
 
         <div class="image-container">
             <div class="comparison">
-                <div class="image-wrapper">
-                    <div class="image-box" id="ourMethodBox">
-                        <img id="ourMethodImg" src="images/0_our_method.png" alt="Our Method">
-                    </div>
-                    <div class="zoom-controls">
-                        <button class="zoom-in-btn" data-target="ourMethod" style="display: none;">Zoom +</button>
-                        <button class="zoom-out-btn" data-target="ourMethod" style="display: none;">Zoom -</button>
-                        <button class="reset-button" data-target="ourMethod" style="display: none;">Reset</button>
-                    </div>
-                    <div class="zoom-indicator" id="ourMethodZoomLevel" style="display: none;">Zoom: 100%</div>
-                </div>
                 <div class="image-wrapper">                  
                     <div class="image-box" id="seamformerBox">
                         <img id="seamformerImg" src="images/0_seamformer.png" alt="Seamformer">
@@ -222,9 +211,20 @@
                     </div>
                     <div class="zoom-indicator" id="seamformerZoomLevel" style="display: none;">Zoom: 100%</div>
                 </div>
+                <div class="image-wrapper">
+                    <div class="image-box" id="ourMethodBox">
+                        <img id="ourMethodImg" src="images/0_our_method.png" alt="Our Method">
+                    </div>
+                    <div class="zoom-controls">
+                        <button class="zoom-in-btn" data-target="ourMethod" style="display: none;">Zoom +</button>
+                        <button class="zoom-out-btn" data-target="ourMethod" style="display: none;">Zoom -</button>
+                        <button class="reset-button" data-target="ourMethod" style="display: none;">Reset</button>
+                    </div>
+                    <div class="zoom-indicator" id="ourMethodZoomLevel" style="display: none;">Zoom: 100%</div>
+                </div>
             </div>
         </div>
-        <h3>When line segmentation predictions are made at pixel level, it is time consuming to annotate and make corrections. When line segmentation predictions are made at node (character) level, it is easier to make corrections by adding or deleting edges.</h3>
+        <h3>When text-line segmentation predictions are made at pixel level (left), it is time consuming to annotate data and correct the outputs. Comparitively, when text-line segmentation predictions are made at graph-structural level (right), it is much easier to annotate data and make corrections to the output (simply by adding or deleting edges.)</h3>
     </div>
 
     <script>
