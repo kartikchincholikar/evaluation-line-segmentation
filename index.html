@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <title></title> -->
+    <h4>When line segmentation predictions are made at pixel level, it is time consuming to annotate and make corrections. When line segmentation predictions are made at node (character) level, it is easier to make corrections by adding or deleting edges.</h4>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -225,7 +225,6 @@
                     </div>
                     <div class="zoom-indicator" id="seamformerZoomLevel" style="display: none;">Zoom: 100%</div>
                 </div>
-                <h4>When line segmentation predictions are made at pixel level, it is time consuming to annotate and make corrections. When line segmentation predictions are made at node (character) level, it is easier to make corrections by adding or deleting edges.</h4>
             </div>
         </div>
     </div>
@@ -240,8 +239,8 @@
         const INITIAL_ZOOM = 4; // Initial zoom level (100%)
         
         // Custom captions - edit these to match your needs
-        const OUR_METHOD_CAPTION = "When line segmentation predictions are made at node (character) level, it is easier to make corrections by adding or deleting edges.";
-        const SEAMFORMER_CAPTION = "When line segmentation predictions are made at pixel level, it is a bit more time consuming to make corrections.";
+        // const OUR_METHOD_CAPTION = "When line segmentation predictions are made at node (character) level, it is easier to make corrections by adding or deleting edges.";
+        // const SEAMFORMER_CAPTION = "When line segmentation predictions are made at pixel level, it is a bit more time consuming to make corrections.";
         
         // DOM elements
         const prevBtn = document.getElementById('prevBtn');
@@ -287,8 +286,8 @@
         };
         
         // Set the captions
-        ourMethodCaption.textContent = OUR_METHOD_CAPTION;
-        seamformerCaption.textContent = SEAMFORMER_CAPTION;
+        // ourMethodCaption.textContent = OUR_METHOD_CAPTION;
+        // seamformerCaption.textContent = SEAMFORMER_CAPTION;
         
         // Toggle sync
         syncToggleBtn.addEventListener('click', () => {
