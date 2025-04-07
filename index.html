@@ -224,7 +224,6 @@
                 </div>
             </div>
         </div>
-        <h4>When text-line segmentations are predicted densely at the pixel-level (left figure) - data annotation, and making corrections to the output, can be expensive and time consuming. In comparison (right figure), predicting text-line segmentations as nodes representing characters, and edges representing the connections between the characters, makes it much easier to manually annotate the data and make corrections to the output - by simply adding or deleting edges. We envision this process to become progressively more automatic by teaching  Graph Neural Networks (GNNs) to active-learn from human-made edge modifications, as well as from synthetically generated layout data.</h4>
     </div>
 
     <script>
@@ -237,8 +236,8 @@
         const INITIAL_ZOOM = 1.2; // Initial zoom level (100%)
         
         // Custom captions - edit these to match your needs
-        // const OUR_METHOD_CAPTION = "When line segmentation predictions are made at node (character) level, it is easier to make corrections by adding or deleting edges.";
-        // const SEAMFORMER_CAPTION = "When line segmentation predictions are made at pixel level, it is a bit more time consuming to make corrections.";
+        const OUR_METHOD_CAPTION = "Predicting text-line segmentations as nodes the representing characters, and edges representing the connections between the characters, makes it much easier to manually annotate the data and make corrections to the output - by simply adding or deleting edges. We envision this process to become progressively more automatic by teaching  Graph Neural Networks (GNNs) to active-learn from human-made edge modifications, as well as from synthetically generated layout data.";
+        const SEAMFORMER_CAPTION = "When text-line segmentations are predicted densely at the pixel-level (left figure) - data annotation, and making corrections to the output, can be expensive and time consuming.";
         
         // DOM elements
         const prevBtn = document.getElementById('prevBtn');
@@ -284,8 +283,8 @@
         };
         
         // Set the captions
-        // ourMethodCaption.textContent = OUR_METHOD_CAPTION;
-        // seamformerCaption.textContent = SEAMFORMER_CAPTION;
+        ourMethodCaption.textContent = OUR_METHOD_CAPTION;
+        seamformerCaption.textContent = SEAMFORMER_CAPTION;
         
         // Toggle sync
         syncToggleBtn.addEventListener('click', () => {
