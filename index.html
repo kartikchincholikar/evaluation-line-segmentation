@@ -210,6 +210,7 @@
                         <button class="reset-button" data-target="seamformer" style="display: none;">Reset</button>
                     </div>
                     <div class="zoom-indicator" id="seamformerZoomLevel" style="display: none;">Zoom: 100%</div>
+                    <p id="seamformerCaption">State-of-the-art transformer-based network for manuscript analysis.</p>
                 </div>
                 <div class="image-wrapper">
                     <div class="image-box" id="ourMethodBox">
@@ -221,6 +222,7 @@
                         <button class="reset-button" data-target="ourMethod" style="display: none;">Reset</button>
                     </div>
                     <div class="zoom-indicator" id="ourMethodZoomLevel" style="display: none;">Zoom: 100%</div>
+                    <p id="ourMethodCaption">State-of-the-art transformer-based network for manuscript analysis.</p>
                 </div>
             </div>
         </div>
@@ -236,7 +238,7 @@
         const INITIAL_ZOOM = 1.2; // Initial zoom level (100%)
         
         // Custom captions - edit these to match your needs
-        const OUR_METHOD_CAPTION = "Predicting text-line segmentations as nodes the representing characters, and edges representing the connections between the characters, makes it much easier to manually annotate the data and make corrections to the output - by simply adding or deleting edges. We envision this process to become progressively more automatic by teaching  Graph Neural Networks (GNNs) to active-learn from human-made edge modifications, as well as from synthetically generated layout data.";
+        const OUR_METHOD_CAPTION = "Predicting text-line segmentations, with nodes representing the characters positions, and edges representing the connections between the characters, makes it much easier to manually annotate the data and make corrections to the output - by simply adding or deleting edges. We envision this process to become progressively more automatic by teaching  Graph Neural Networks (GNNs) to active-learn from human-made edge modifications, as well as from synthetically generated layout data.";
         const SEAMFORMER_CAPTION = "When text-line segmentations are predicted densely at the pixel-level (left figure) - data annotation, and making corrections to the output, can be expensive and time consuming.";
         
         // DOM elements
